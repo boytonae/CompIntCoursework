@@ -25,12 +25,8 @@ class SearchSpace
     return float.MAX unless is_valid(weights)
     estimates = []
     data.each_with_index do |row, index|
-      puts index
       # apply weights to each row to get estimate
       estimates << calc_estimate(weights, row)
-
-      print estimates
-      print "\n"
     end
 
     fitness(estimates)
