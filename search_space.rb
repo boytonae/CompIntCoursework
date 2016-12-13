@@ -43,6 +43,15 @@ class SearchSpace
     true
   end
 
+  def generate_valid_weights
+    weights = []
+    for i in (0..12)
+      weights << rand * (100.00-(-100.00)) + -100.00
+    end
+
+    weights
+  end
+
   private
   def calc_estimate(weights, row)
     total = 0
