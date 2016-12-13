@@ -22,6 +22,7 @@ class SearchSpace
   end
 
   def evaluate(weights)
+    return float.MAX unless is_valid(weights)
     estimates = []
     data.each_with_index do |row, index|
       puts index
@@ -33,6 +34,13 @@ class SearchSpace
     end
 
     fitness(estimates)
+  end
+
+  def is_valid(weights)
+    weights.each do |weight|
+      return false if weight < -100.00 || weight > 100
+    end
+    true
   end
 
   private
