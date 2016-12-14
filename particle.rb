@@ -1,7 +1,7 @@
 require 'matrix'
 
 class Particle
-  attr_reader :personal_best, :personal_best_cost
+  attr_reader :personal_best
 
   def initialize(search_space)
     @positions = Matrix[search_space.generate_valid_weights]
@@ -12,7 +12,6 @@ class Particle
     @velocity = difference / 2
 
     @personal_best = @positions
-    @personal_best_cost = search_space.evaluate(positions_array)
   end
 
   def update(search_space, global_best)
@@ -23,13 +22,12 @@ class Particle
     update_velocity(global_best)
 
     # evaluate position
-    current_pos_cost = search_space.evaluate(positions_array)
+    current_pos_cost = search_space.evaluate(@positions)
 
     # update pb if cp is better
-    return unless current_pos_cost < personal_best_cost
-
-    @personal_best = @positions
-    @personal_best_cost = current_pos_cost
+    if current_pos_cost < search_space.evaluate(@personal_best)
+      @personal_best = @positions
+    end
   end
 
   def inertia
@@ -71,7 +69,7 @@ class Particle
     array2 = matrix2.to_a[0]
 
     unless array1.length == array2.length
-      raise StandardError 'Matricies don\'t match'
+      raise StandardError 'Matrices don\'t match'
     end
 
     array1.each_with_index do |value, i|

@@ -1,7 +1,15 @@
-require 'csv'
+require_relative 'particle_swarm'
 
-data = CSV.read('cwk_test.csv')
-print data
+# training_data = SearchSpace.new('cwk_train.csv')
 
-# Split data 2/3 for training
-# and 1/3 for checking to avoid overfitting
+swarm = ParticleSwarm.new
+
+print "\n****************************\n"
+print swarm.global_best_cost
+
+(0..1000).each do
+  swarm.search
+end
+print "\n****************************\n"
+print swarm.global_best_cost
+print "\n****************************\n"
