@@ -1,8 +1,9 @@
 require 'csv'
 
 class SearchSpace
-  def initialize(file_path)
+  attr_reader :actual_demand, :data
 
+  def initialize(file_path)
     @actual_demand = []
     @data = []
     CSV.foreach(file_path) do |row|
@@ -13,18 +14,10 @@ class SearchSpace
     end
   end
 
-  def actual_demand
-    @actual_demand
-  end
-
-  def data
-    @data
-  end
-
   def evaluate(weights)
-    return float.MAX unless is_valid(weights)
+    return float.MAX unless valid?(weights)
     estimates = []
-    data.each_with_index do |row, index|
+    data.each do |row|
       # apply weights to each row to get estimate
       estimates << calc_estimate(weights, row)
     end
@@ -32,7 +25,7 @@ class SearchSpace
     fitness(estimates)
   end
 
-  def is_valid(weights)
+  def valid?(weights)
     weights.each do |weight|
       return false if weight < -100.00 || weight > 100
     end
@@ -41,21 +34,22 @@ class SearchSpace
 
   def generate_valid_weights
     weights = []
-    for i in (0..12)
-      weights << rand * (100.00-(-100.00)) + -100.00
+    (0...@actual_demand.length).each do
+      weights << rand * (100.00 - -100.00) + -100.00
     end
 
     weights
   end
 
   private
+
   def calc_estimate(weights, row)
     total = 0
     weights.each_with_index do |weight, index|
-      total += weight*row[index].to_f
+      total += weight * row[index].to_f
     end
 
-    total/weights.length
+    total / weights.length
   end
 
   def fitness(estimates)
@@ -63,6 +57,6 @@ class SearchSpace
     estimates.each_with_index do |estimate, index|
       total += estimate - actual_demand[index].to_f
     end
-    total/estimates.length
+    total / estimates.length
   end
 end
