@@ -7,7 +7,7 @@ class Evolutionary
     @training_data = SearchSpace.new('cwk_train.csv')
 
     @population = []
-    (0..pop_size).each do
+    (0...pop_size).each do
       @population << @training_data.generate_valid_weights
     end
   end
@@ -18,12 +18,29 @@ class Evolutionary
 
   private
 
-  def breed(parent1, parent2)
+  # randomly selects values from the parents to make a child
+  # the more parents, the less will come from each
+  def breed(parents)
+    child = []
 
+    for i in (0...parents[0].length) do
+      random_parent = ((0...parents.length).to_a).sample
+      puts random_parent
+      child << parents[random_parent][i]
+    end
+    print child
+    child
   end
 
-  def rand_selection(num_candidates)
+  def rand_selection(num_candidates, population)
+    candidates = []
 
+    (0...num_candidates).each do
+      rand_candidate = ((0...population.length).to_a).sample
+
+      candidates << population[rand_candidate]
+    end
+
+    candidates
   end
-
 end
