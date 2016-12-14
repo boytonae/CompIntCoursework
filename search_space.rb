@@ -15,7 +15,7 @@ class SearchSpace
   end
 
   def evaluate(weights)
-    return float.MAX unless valid?(weights)
+    return Float::MAX unless valid?(weights)
     estimates = []
     data.each do |row|
       # apply weights to each row to get estimate
@@ -49,13 +49,13 @@ class SearchSpace
       total += weight * row[index].to_f
     end
 
-    total / weights.length
+    total / weights.to_a.length
   end
 
   def fitness(estimates)
     total = 0
     estimates.each_with_index do |estimate, index|
-      total += estimate - actual_demand[index].to_f
+      total += (estimate - actual_demand[index].to_f).abs
     end
     total / estimates.length
   end
