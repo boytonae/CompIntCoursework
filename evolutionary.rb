@@ -43,4 +43,12 @@ class Evolutionary
 
     candidates
   end
+
+  def best_selection(num_candidates, population)
+    sorted_pop = population.sort_by do |member|
+      @training_data.evaluate(member)
+    end
+
+    sorted_pop[0...num_candidates]
+  end
 end
