@@ -69,7 +69,7 @@ class Particle
     array2 = matrix2.to_a[0]
 
     unless array1.length == array2.length
-      raise StandardError 'Matrices don\'t match'
+      raise 'Matrices don\'t match'
     end
 
     array1.each_with_index do |value, i|
